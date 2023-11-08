@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
 const cookieParser = require('cookie-parser');
 const router = require('./routes/default');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const { PORT = 3000, URL = 'mongodb://127.0.0.1/mestodb' } = process.env;
 
@@ -14,8 +15,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 mongoose.connect(URL);
+app.use(requestLogger);
 app.use(router);
 
+app.use(errorLogger);
 app.use(errors());
 
 app.use((err, req, res, next) => {
