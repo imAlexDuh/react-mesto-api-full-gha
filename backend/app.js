@@ -20,7 +20,7 @@ mongoose.connect(URL);
 // app.use(requestLogger);
 app.use(router);
 
-// app.use(errorLogger);
+// app.use(errorLogger); //
 app.use(errors());
 
 app.get('/crash-test', () => {
