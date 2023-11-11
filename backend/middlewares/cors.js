@@ -1,4 +1,10 @@
 const allowedCors = [
+  'http://imalexduh.students.nomoredomainsmonster.ru/',
+  'https://imalexduh.students.nomoredomainsmonster.ru/',
+  'http://51.250.75.169',
+  'https://51.250.75.169',
+  'http://localhost:3000',
+  'http://localhost:3001',
 ];
 
 const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
