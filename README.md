@@ -7,7 +7,7 @@
 
 ## Ссылки на проект
 
-IP-адрес 51.250.75.169
+IP 51.250.75.169
 
 Frontend https://imalexduh.students.nomoredomainsmonster.ru/
 
