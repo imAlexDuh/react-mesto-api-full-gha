@@ -14,7 +14,6 @@ class Auth {
     register(data) {
         return fetch(`${this._url}/signup`, {
             method: 'POST',
-            password: 'include',
             headers: this._headers,
             body: JSON.stringify({
                 password: data.password,
@@ -26,7 +25,6 @@ class Auth {
     auth(data) {
         return fetch(`${this._url}/signin`, {
             method: 'POST',
-            password: 'include',
             headers: this._headers,
             body: JSON.stringify({
                 password: data.password,
@@ -47,7 +45,7 @@ class Auth {
 }
 
 const auth = new Auth({
-    baseUrl: 'https://api.imalexduh.students.nomoredomainsmonster.ru/',
+    baseUrl: 'https://auth.nomoreparties.co',
     headers: {
       'Content-Type': 'application/json'
     }

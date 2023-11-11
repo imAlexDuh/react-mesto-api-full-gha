@@ -2,7 +2,6 @@ class Api {
   constructor(options) {
     this._url = options.baseUrl;
     this._headers = options.headers;
-    this._password = options.password;
   }
 
   _handleResponse(res) {
@@ -14,15 +13,13 @@ class Api {
 
   getUserInfo() {
     return fetch(`${this._url}/users/me`, {
-      headers: this._headers,
-      password: this._password,
+      headers: this._headers
     }).then(this._handleResponse)
   }
 
   setUserInfo(data) {
     return fetch(`${this._url}/users/me`, {
       method: 'PATCH',
-      password: this._password,
       headers: this._headers,
       body: JSON.stringify({
         name: data.name,
@@ -33,8 +30,7 @@ class Api {
 
   getCardsInfo() {
     return fetch(`${this._url}/cards`, {
-      headers: this._headers,
-      password: this._password,
+      headers: this._headers
     }).then(this._handleResponse)
   }
 
@@ -45,7 +41,6 @@ class Api {
   addCard(data) {
     return fetch(`${this._url}/cards`, {
       method: 'POST',
-      password: this._password,
       headers: this._headers,
       body: JSON.stringify({
         name: data.name,
@@ -57,7 +52,6 @@ class Api {
   pressLike(id) {
     return fetch(`${this._url}/cards/likes/${id}`, {
       method: 'PUT',
-      password: this._password,
       headers: this._headers
     }).then(this._handleResponse)
   }
@@ -65,7 +59,6 @@ class Api {
   unpressLike(id) {
     return fetch(`${this._url}/cards/likes/${id}`, {
       method: 'DELETE',
-      password: this._password,
       headers: this._headers
     }).then(this._handleResponse)
   }
@@ -73,7 +66,6 @@ class Api {
   deleteCard(id) {
     return fetch(`${this._url}/cards/${id}`, {
       method: 'DELETE',
-      password: this._password,
       headers: this._headers
     }).then(this._handleResponse)
   }
@@ -81,7 +73,6 @@ class Api {
   setUserAvatar(data) {
     return fetch(`${this._url}/users/me/avatar`, {
       method: 'PATCH',
-      password: this._password,
       headers: this._headers,
       body: JSON.stringify({
         avatar: data.avatar
@@ -98,13 +89,13 @@ class Api {
   }
 
 
-};
+}; 
 
 const api = new Api({
-  baseUrl: 'http://localhost:3000',
-  password: 'include',
+  baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-72',
   headers: {
-    'Content-Type': 'application/json'
+      authorization: '3381e851-a258-4777-88b5-08c3a96458a6',
+      'Content-Type': 'application/json'
   }
 });
 
