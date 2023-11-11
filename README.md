@@ -7,8 +7,8 @@
 
 ## Ссылки на проект
 
-IP-адрес 158.160.48.89
+IP 51.250.75.169
 
-Frontend https://...
+Frontend https://imalexduh.students.nomoredomainsmonster.ru/
 
-Backend https://...
+Backend https://api.imalexduh.students.nomoredomainsmonster.ru/
