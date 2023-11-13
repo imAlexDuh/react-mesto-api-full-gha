@@ -36,19 +36,20 @@ function App() {
 
 
     React.useEffect(() => {
-        if(loggedIn) {
-        Promise.all([api.getUserInfo(), api.getCardsInfo()])
-          .then(([userData, initialCards]) => {
-            setCurrentUser(userData.user);
-            setCardsData(initialCards.cards);
-          })
-          .catch((err) => console.log(err))}
-      }, [loggedIn]);
+        if (loggedIn) {
+            Promise.all([api.getUserInfo(), api.getCardsInfo()])
+                .then(([userData, initialCards]) => {
+                    setCurrentUser(userData.user);
+                    setCardsData(initialCards.cards);
+                })
+                .catch((err) => console.log(err))
+        }
+    }, [loggedIn]);
 
 
     React.useEffect(() => {
         loggedIn && history.push('/');
-      }, [history, loggedIn]);
+    }, [history, loggedIn]);
 
     function handleInfoTooltipOpen() {
         setIsInfoTooltipOpen(true);
@@ -80,7 +81,7 @@ function App() {
     }
 
     function handleCardLike(card) {
-        const isLiked = card.likes.some(i => i._id === currentUser._id);
+        const isLiked = card.likes.some(i => i === currentUser._id);
 
         api.changeLikeCardStatus(card._id, isLiked)
             .then((newCard) => {
@@ -183,39 +184,33 @@ function App() {
             })
     }
 
-    const handleCheckToken = () => {
-        const token = localStorage.getItem('jwt');
-        if (token) {
-            auth.checkToken(token)
-                .then((response) => {
-                    if (response) {
-                        setAuthUserEmail(response.user.email);
-                        setLoggedIn(true);
-                        history.push('/');
-                    }
-                })
-
-                .catch((err) => {
-                    console.log(err);
-                });
-        }
-    };
+    React.useEffect(() => {
+        auth.checkToken()
+            .then((data) => {
+                if (data) {
+                    setLoggedIn(true);
+                    setAuthUserEmail(data.user.email);
+                    history('/', { replace: true });
+                }
+            })
+            .catch((err) => console.log(err))
+    }, [history])
 
     const isOpen = isEditAvatarPopupOpen || isEditProfilePopupOpen || isAddPlacePopupOpen || isImgPopupOpen
 
     React.useEffect(() => {
-      function closeByEscape(evt) {
-        if(evt.key === 'Escape') {
-          closeAllPopups();
+        function closeByEscape(evt) {
+            if (evt.key === 'Escape') {
+                closeAllPopups();
+            }
         }
-      }
-      if(isOpen) {
-        document.addEventListener('keydown', closeByEscape);
-        return () => {
-          document.removeEventListener('keydown', closeByEscape);
+        if (isOpen) {
+            document.addEventListener('keydown', closeByEscape);
+            return () => {
+                document.removeEventListener('keydown', closeByEscape);
+            }
         }
-      }
-    }, [isOpen]) 
+    }, [isOpen])
 
     return (
         <CurrentUserContext.Provider value={currentUser}>
@@ -236,7 +231,6 @@ function App() {
                 <Route path="/sign-in">
                     <Login
                         onAuth={handleAuth}
-                        onCheckToken={handleCheckToken}
                     />
                 </Route>
 

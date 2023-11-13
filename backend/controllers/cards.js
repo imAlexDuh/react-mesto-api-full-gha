@@ -56,9 +56,9 @@ const likeCard = (req, res, next) => {
     { $addToSet: { likes: req.user._id } },
     { new: true },
   )
-    .then((cards) => {
-      if (!cards) { throw new NotExistErr('Такой карточки нет.'); }
-      return res.send({ cards });
+    .then((card) => {
+      if (!card) { throw new NotExistErr('Такой карточки нет.'); }
+      return res.send({ card });
     })
 
     .catch((err) => {
@@ -75,9 +75,9 @@ const dislikeCard = (req, res, next) => {
     { $pull: { likes: req.user._id } },
     { new: true },
   )
-    .then((cards) => {
-      if (!cards) { throw new NotExistErr('Такой карточки нет.'); }
-      return res.send({ cards });
+    .then((card) => {
+      if (!card) { throw new NotExistErr('Такой карточки нет.'); }
+      return res.send({ card });
     })
 
     .catch((err) => {
