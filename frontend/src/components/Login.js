@@ -16,10 +16,10 @@ const Login = ({ onAuth, onCheckToken }) => {
 
     function handleSubmit(e) {
         e.preventDefault();
-        onAuth({
+        onAuth(
             email,
             password
-        });
+        );
     }
 
     return (

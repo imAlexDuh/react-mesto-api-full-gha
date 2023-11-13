@@ -13,7 +13,8 @@ class Api {
 
   getUserInfo() {
     return fetch(`${this._url}/users/me`, {
-      headers: this._headers
+      headers: this._headers,
+      credentials: 'include'
     }).then(this._handleResponse)
   }
 
@@ -21,6 +22,7 @@ class Api {
     return fetch(`${this._url}/users/me`, {
       method: 'PATCH',
       headers: this._headers,
+      credentials: 'include',
       body: JSON.stringify({
         name: data.name,
         about: data.about
@@ -30,7 +32,8 @@ class Api {
 
   getCardsInfo() {
     return fetch(`${this._url}/cards`, {
-      headers: this._headers
+      headers: this._headers,
+      credentials: 'include',
     }).then(this._handleResponse)
   }
 
@@ -38,53 +41,58 @@ class Api {
     return Promise.all([this.getUserInfo(), this.getCardsInfo()]);
   }
 
-  addCard(data) {
+  addCard({ name, link} ) {
     return fetch(`${this._url}/cards`, {
       method: 'POST',
       headers: this._headers,
+      credentials: 'include',
       body: JSON.stringify({
-        name: data.name,
-        link: data.link
+        name,
+        link
       })
     }).then(this._handleResponse)
   }
 
-  pressLike(id) {
-    return fetch(`${this._url}/cards/likes/${id}`, {
+  pressLike(cId) {
+    return fetch(`${this._url}/cards/${cId}/likes`, {
       method: 'PUT',
-      headers: this._headers
+      headers: this._headers,
+      credentials: 'include'
     }).then(this._handleResponse)
   }
 
-  unpressLike(id) {
-    return fetch(`${this._url}/cards/likes/${id}`, {
+  unpressLike(cId) {
+    return fetch(`${this._url}/cards/${cId}/likes`, {
       method: 'DELETE',
-      headers: this._headers
+      headers: this._headers,
+      credentials: 'include'
     }).then(this._handleResponse)
   }
 
-  deleteCard(id) {
-    return fetch(`${this._url}/cards/${id}`, {
+  deleteCard(cId) {
+    return fetch(`${this._url}/cards/${cId}`, {
       method: 'DELETE',
-      headers: this._headers
+      headers: this._headers,
+      credentials: 'include'
     }).then(this._handleResponse)
   }
 
-  setUserAvatar(data) {
+  setUserAvatar(avatar) {
     return fetch(`${this._url}/users/me/avatar`, {
       method: 'PATCH',
       headers: this._headers,
-      body: JSON.stringify({
-        avatar: data.avatar
-      })
+      credentials: 'include',
+      body: JSON.stringify(
+        avatar
+      )
     }).then(this._handleResponse)
   }
 
-  changeLikeCardStatus(id, isLiked) {
+  changeLikeCardStatus(cId, isLiked) {
     if (isLiked) {
-      return this.unpressLike(id);
+      return this.unpressLike(cId);
     } else {
-      return this.pressLike(id);
+      return this.pressLike(cId);
     }
   }
 
@@ -92,9 +100,8 @@ class Api {
 }; 
 
 const api = new Api({
-  baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-72',
+  baseUrl: 'http://localhost:3001',
   headers: {
-      authorization: '3381e851-a258-4777-88b5-08c3a96458a6',
       'Content-Type': 'application/json'
   }
 });

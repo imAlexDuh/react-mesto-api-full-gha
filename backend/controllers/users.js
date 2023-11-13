@@ -8,7 +8,6 @@ const ExistingEmailErr = require('../errors/ExistingEmailErr');
 const NotExistErr = require('../errors/NotExistErr');
 const BadRequestErr = require('../errors/BadRequestErr');
 
-const SECRET = 'secretkey';
 const ROUND = 10;
 
 // eslint-disable-next-line consistent-return
@@ -18,7 +17,8 @@ const login = (req, res, next) => {
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, SECRET, { expiresIn: '7d' });
+      const { NODE_ENV, SECRET } = process.env;
+      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? SECRET : 'secretkey', { expiresIn: '7d' });
 
       res
         .cookie('jwt', token, {
@@ -39,7 +39,7 @@ const getCurrentUser = (req, res, next) => {
       if (!user) {
         return next(new NotExistErr('Пользователь по указанному не найден.'));
       }
-      return res.status(200).send(user);
+      return res.status(200).send({ user });
     })
     .catch((err) => next(err));
 };
@@ -75,7 +75,7 @@ const postUsers = (req, res, next) => {
 
 const getUsers = (req, res, next) => {
   User.find({})
-    .then((result) => res.send(result))
+    .then((users) => res.send({ users }))
     .catch(next);
 };
 

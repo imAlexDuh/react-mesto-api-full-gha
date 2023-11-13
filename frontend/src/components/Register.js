@@ -25,10 +25,10 @@ const Register = ({ onRegistration }) => {
 
     function handleSubmit(e) {
         e.preventDefault();
-        onRegistration({
+        onRegistration(
             email,
             password
-        });
+        );
     }
 
     return (

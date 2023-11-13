@@ -7,7 +7,6 @@ import ImagePopup from './ImagePopup.js';
 import EditProfilePopup from './EditProfilePopup.js';
 import EditAvatarPopup from './EditAvatarPopup.js';
 import AddPlacePopup from './AddPlacePopup.js';
-import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 import api from '../utils/Api';
 import auth from '../utils/auth';
 import ProtectedRoute from './ProtectedRoute';
@@ -15,6 +14,7 @@ import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import InfoTooltip from './InfoTooltip.js';
 import Login from './Login.js';
 import Register from './Register.js';
+import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 
 
 function App() {
@@ -34,37 +34,21 @@ function App() {
 
     const history = useHistory();
 
-    React.useEffect(() => {
-        api.getCardsInfo()
-            .then((data) => {
-                setCardsData(data);
-            })
-
-            .catch((err) => {
-                console.log(err);
-            })
-
-    }, [])
 
     React.useEffect(() => {
-        api.getUserInfo()
-            .then((data) => {
-                setCurrentUser(data);
-            })
+        if(loggedIn) {
+        Promise.all([api.getUserInfo(), api.getCardsInfo()])
+          .then(([userData, initialCards]) => {
+            setCurrentUser(userData.user);
+            setCardsData(initialCards.cards);
+          })
+          .catch((err) => console.log(err))}
+      }, [loggedIn]);
 
-            .catch((err) => {
-                console.log(err);
-            })
-
-    }, [])
-
-    React.useEffect(() => {
-        handleCheckToken();
-    }, []);
 
     React.useEffect(() => {
         loggedIn && history.push('/');
-      }, [loggedIn]);
+      }, [history, loggedIn]);
 
     function handleInfoTooltipOpen() {
         setIsInfoTooltipOpen(true);
@@ -119,10 +103,10 @@ function App() {
             })
     }
 
-    function handleUpdateUser(data) {
-        api.setUserInfo(data)
-            .then((data) => {
-                setCurrentUser(data);
+    function handleUpdateUser(newInfo) {
+        api.setUserInfo(newInfo)
+            .then((userData) => {
+                setCurrentUser(userData.user);
                 closeAllPopups();
             })
 
@@ -132,10 +116,10 @@ function App() {
 
     }
 
-    function handleUpdateAvatar(data) {
-        api.setUserAvatar(data)
-            .then((data) => {
-                setCurrentUser(data);
+    function handleUpdateAvatar(newAvatar) {
+        api.setUserAvatar(newAvatar)
+            .then((userData) => {
+                setCurrentUser(userData.user);
                 closeAllPopups();
             })
 
@@ -144,10 +128,10 @@ function App() {
             })
     }
 
-    function handleAddPlaceSubmit(data) {
-        api.addCard(data)
+    function handleAddPlaceSubmit(place) {
+        api.addCard(place)
             .then((newCard) => {
-                setCardsData([newCard, ...cards]);
+                setCardsData([newCard.card, ...cards]);
                 closeAllPopups();
             })
 
@@ -162,10 +146,10 @@ function App() {
         history.push('/sign-in');
     }
 
-    function handleRegistration(data) {
-        auth.register(data)
+    function handleRegistration(email, password) {
+        auth.register(email, password)
             .then(
-                () => {
+                (data) => {
                     setIsSuccesLogin(true);
                     history.push('/sign-in');
                 }
@@ -181,13 +165,13 @@ function App() {
             })
     }
 
-    function handleAuth(info) {
-        setAuthUserEmail(info.email);
-        auth.auth(info)
+    function handleAuth(email, password) {
+        setAuthUserEmail(email);
+        auth.auth(email, password)
             .then(
-                (info) => {
+                (data) => {
                     setLoggedIn(true);
-                    localStorage.setItem('jwt', info.token);
+                    localStorage.setItem('jwt', data.token);
                     history.push('/');
                 }
             )
@@ -205,7 +189,7 @@ function App() {
             auth.checkToken(token)
                 .then((response) => {
                     if (response) {
-                        setAuthUserEmail(response.data.email);
+                        setAuthUserEmail(response.user.email);
                         setLoggedIn(true);
                         history.push('/');
                     }
