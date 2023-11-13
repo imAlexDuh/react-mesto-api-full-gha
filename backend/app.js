@@ -7,7 +7,7 @@ const router = require('./routes/default');
 const cors = require('./middlewares/cors');
 const { requestLogger } = require('./middlewares/logger');
 
-const { PORT = 3001, URL = 'mongodb://127.0.0.1/mestodb' } = process.env;
+const { PORT = 3000, URL = 'mongodb://127.0.0.1/mestodb' } = process.env;
 
 const app = express();
 app.use(express.json());
@@ -37,5 +37,5 @@ app.use((err, req, res, next) => {
 
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console
-  console.log('Express is on port 3001');
+  console.log('Express is on port 3000');
 });
