@@ -45,7 +45,7 @@ class Auth {
 }
 
 const auth = new Auth({
-    baseUrl: 'http://localhost:3001',
+    baseUrl: 'https://api.imalexduh.students.nomoredomainsmonster.ru',
     headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
