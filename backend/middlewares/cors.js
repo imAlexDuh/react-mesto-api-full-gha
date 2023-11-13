@@ -1,6 +1,8 @@
 const allowedCors = [
   'http://imalexduh.students.nomoredomainsmonster.ru/',
   'https://imalexduh.students.nomoredomainsmonster.ru/',
+  'http://api.imalexduh.students.nomoredomainsmonster.ru/',
+  'https://api.imalexduh.students.nomoredomainsmonster.ru/',
   'http://51.250.75.169',
   'https://51.250.75.169',
   'http://localhost:3000',
