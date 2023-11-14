@@ -8,7 +8,7 @@ const URL_REGEX = /^((ftp|http|https):\/\/)?(www\.)?([A-Za-zА-Яа-я0-9]{1}[A-
 
 const NotExistErr = require('../errors/NotExistErr');
 
-const { postUsers, login } = require('../controllers/users');
+const { postUsers, login, logout } = require('../controllers/users');
 
 router.post('/signup', celebrate({
   body: Joi.object().keys({
@@ -30,6 +30,7 @@ router.post('/signin', celebrate({
 router.use(auth);
 router.use(userRouter);
 router.use(cardRouter);
+router.post('/signout', logout);
 
 router.use('*', (req, res, next) => {
   next(new NotExistErr('Такой страницы нет'));

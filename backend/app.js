@@ -1,6 +1,5 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
 const cookieParser = require('cookie-parser');
 const router = require('./routes/default');
@@ -11,9 +10,6 @@ const { PORT = 3000, URL = 'mongodb://127.0.0.1/mestodb' } = process.env;
 
 const app = express();
 app.use(express.json());
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors);
 mongoose.connect(URL);

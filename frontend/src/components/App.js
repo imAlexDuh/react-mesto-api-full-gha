@@ -142,9 +142,12 @@ function App() {
     }
 
     function handleSignOut() {
-        setLoggedIn(false);
-        localStorage.removeItem('jwt');
-        history.push('/sign-in');
+        auth.logout()
+        .then(() => {
+            setLoggedIn(false);
+            localStorage.removeItem('jwt');
+            history.push('/sign-in');
+        })
     }
 
     function handleRegistration(email, password) {

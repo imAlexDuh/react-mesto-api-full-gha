@@ -1,4 +1,3 @@
-/* eslint-disable consistent-return */
 const Card = require('../models/card');
 
 const BadRequestErr = require('../errors/BadRequestErr');

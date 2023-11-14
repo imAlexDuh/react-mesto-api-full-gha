@@ -35,13 +35,21 @@ class Auth {
         }).then(this._handleResponse)
     }
 
+    logout() {
+        return fetch(`${this._url}/signout`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: this._headers,
+        }).then(this._handleResponse)
+    }
+
     checkToken = () => {
         return fetch(`${this._url}/users/me`, {
-          method: 'GET',
-          credentials: 'include',
-          headers: this._headers,
+            method: 'GET',
+            credentials: 'include',
+            headers: this._headers,
         }).then(this._handleResponse)
-      };
+    };
 }
 
 const auth = new Auth({
@@ -50,6 +58,6 @@ const auth = new Auth({
         'Accept': 'application/json',
         'Content-Type': 'application/json'
     }
-  });
-  
-  export default auth;
+});
+
+export default auth;

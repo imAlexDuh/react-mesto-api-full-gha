@@ -1,4 +1,3 @@
-/* eslint-disable consistent-return */
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const User = require('../models/user');
@@ -10,15 +9,13 @@ const BadRequestErr = require('../errors/BadRequestErr');
 
 const ROUND = 10;
 
-// eslint-disable-next-line consistent-return
-
 const login = (req, res, next) => {
   const { email, password } = req.body;
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
       const { NODE_ENV, SECRET } = process.env;
-      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? SECRET : 'secretkey', { expiresIn: '7d' });
+      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? SECRET : 'verysecretkey', { expiresIn: '7d' });
 
       res
         .cookie('jwt', token, {
@@ -31,6 +28,10 @@ const login = (req, res, next) => {
     .catch(() => {
       next(new BadAuthErr('Неправильные почта или пароль.'));
     });
+};
+
+const logout = (req, res) => {
+  res.clearCookie('jwt').send({ message: 'Выход' });
 };
 
 const getCurrentUser = (req, res, next) => {
@@ -49,13 +50,9 @@ const postUsers = (req, res, next) => {
     name, about, avatar, email, password,
   } = req.body;
 
-  if (!email || !password) {
-    return res.status(BadRequestErr).send({ message: 'Поля email и password обязательны' });
-  }
-
-  return bcrypt.hash(req.body.password, ROUND)
+  return bcrypt.hash(password, ROUND)
     .then((hash) => User.create({
-      name, about, avatar, email: req.body.email, password: hash,
+      name, about, avatar, email, password: hash,
     }))
     .then((user) => {
       res.status(201).send({
@@ -143,4 +140,5 @@ module.exports = {
   updateUserProfile,
   patchMeAvatar,
   login,
+  logout,
 };
