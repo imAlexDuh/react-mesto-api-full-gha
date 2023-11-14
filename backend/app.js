@@ -4,7 +4,7 @@ const { errors } = require('celebrate');
 const cookieParser = require('cookie-parser');
 const router = require('./routes/default');
 const cors = require('./middlewares/cors');
-const { requestLogger } = require('./middlewares/logger');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const { PORT = 3000, URL = 'mongodb://127.0.0.1/mestodb' } = process.env;
 
@@ -16,6 +16,7 @@ mongoose.connect(URL);
 app.use(requestLogger);
 app.use(router);
 
+app.use(errorLogger);
 app.use(errors());
 
 app.get('/crash-test', () => {
