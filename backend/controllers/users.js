@@ -15,7 +15,7 @@ const login = (req, res, next) => {
   return User.findUserByCredentials(email, password)
     .then((user) => {
       const { NODE_ENV, SECRET } = process.env;
-      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? SECRET : 'verysecretkey', { expiresIn: '7d' });
+      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? SECRET : 'superverysecretkey', { expiresIn: '7d' });
 
       res
         .cookie('jwt', token, {

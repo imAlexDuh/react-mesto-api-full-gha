@@ -12,7 +12,7 @@ module.exports = (req, res, next) => {
 
   try {
     const { NODE_ENV, SECRET } = process.env;
-    payload = jwt.verify(token, NODE_ENV === 'production' ? SECRET : 'verysecretkey');
+    payload = jwt.verify(token, NODE_ENV === 'production' ? SECRET : 'superverysecretkey');
   } catch (err) {
     next(new BadAuthErr('Необходима авторизация'));
     return;
